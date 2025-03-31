@@ -110,7 +110,7 @@ if analyze_button and filename:
         cafe_name = final['cafe_name']
 
         # Generate recommendation
-        prompt = f"""Find all relevant information about {cafe_name}. I want to know if I should go there based on my requirements: {requirements}.
+        prompt = f"""Find all relevant information about {cafe_name} in Berlin. I want to know if I should go there based on my requirements: {requirements}.
         Be concise and provide direct feedback in two lines maximum."""
 
         
