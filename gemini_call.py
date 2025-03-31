@@ -81,3 +81,7 @@ def compare_requirements_with_place_info(requirements=None, place_info=None):
 
 compare_requirements_with_place_info(requirements="dog-friendly, laptop friendly, cheap, serves a cappuccino", 
                                        place_info='result.json')
+
+
+# gemini call outputs python dict 
+# fix the hard coded place ID
