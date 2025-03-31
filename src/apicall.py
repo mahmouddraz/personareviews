@@ -131,7 +131,7 @@ def get_places_details(
 
         for place in places_result.get("results", []):
             place_id = place.get("place_id")
-
+            print(place_id)
             # Fetch place details
             place_details = gmaps.place(
                 place_id=place_id,
