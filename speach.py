@@ -21,6 +21,25 @@ def upload_to_gcs(local_file_path, bucket_name="bliss-hack25fra-9533"):
   # Return the gs:// URI
   return f"gs://{bucket_name}/audio/{blob_name}"
 
+def clean_bucket(bucket_name="bliss-hack25fra-9533", prefix="audio/"):
+  """Delete all objects in a GCS bucket with the given prefix."""
+  storage_client = storage.Client(project=bucket_name)
+  bucket = storage_client.bucket(bucket_name)
+  
+  # Check if bucket exists first
+  if not bucket.exists():
+    print(f"Bucket {bucket_name} does not exist.")
+    return
+  
+  blobs = bucket.list_blobs(prefix=prefix)
+  deleted_count = 0
+  
+  for blob in blobs:
+    blob.delete()
+    deleted_count += 1
+  
+  print(f"Deleted {deleted_count} files from {bucket_name}/{prefix}")
+
 def generate(local_audio_path):
   # Upload the local audio file to GCS
 
@@ -66,13 +85,13 @@ def generate(local_audio_path):
     threshold="OFF"
     )],
   )
-
+  text = ""
   for chunk in client.models.generate_content_stream(
     model = model,
     contents = contents,
     config = generate_content_config,
     ):
-    print(chunk.text, end="")
-
-local_audio_path = "/Users/davidzumaquero/GitHub/mody/audio/short-audio-sample-10s.mp3"
-generate(local_audio_path)
+    text = text + chunk.text
+  return text
+# local_audio_path = "/Users/davidzumaquero/GitHub/mody/audio/short-audio-sample-10s.mp3"
+# generate(local_audio_path)

@@ -124,9 +124,14 @@ def compare_requirements_with_place_info(requirements=None, place_url=None):
                                Your task is to give the user a rating between 0 and 5 starts of how well does your favorite cafe match his requirements.
 
                                You must return: 
-                               - The name of your favorite cafe. 
+                               - The name of cafe.
                                - The personalized rating that you would give for that cafe. 
-                               - An example from the {place_info} that explains why you would give that rating.
+                               - A review from the {place_info} that explains why you would give that rating.
+
+                               
+                               
+                               Dont provide anything else. 
+                               Output format must a dictionary with the folowing keys: cafe_name, rating, review.
 
                                """)
 
@@ -171,9 +176,38 @@ def compare_requirements_with_place_info(requirements=None, place_url=None):
 
 
 # gemini call outputs python dict 
-
+def parse_response_to_dict(response_text):
+  """
+  Parse the text response from Gemini API into a Python dictionary.
+  
+  Args:
+    response_text (str): JSON-formatted string from the API response
+    
+  Returns:
+    dict: Parsed dictionary containing rating and review
+  """
+  try:
+    # Clean the text in case there are markdown code blocks
+    cleaned_text = response_text
+    if "```json" in response_text:
+      cleaned_text = response_text.split("```json")[1].split("```")[0].strip()
+    elif "```" in response_text:
+      cleaned_text = response_text.split("```")[1].split("```")[0].strip()
+      
+    # Parse the JSON string into a Python dictionary
+    result_dict = json.loads(cleaned_text)
+    return result_dict
+  except json.JSONDecodeError as e:
+    print(f"Error parsing response to dictionary: {e}")
+    return {"rating": 0, "review": "Failed to parse response"}
+  except Exception as e:
+    print(f"Unexpected error: {e}")
+    return {"rating": 0, "review": "An error occurred"}
 
 # run
+
+
 if __name__ == "__main__":
-    compare_requirements_with_place_info(requirements="dog-friendly, laptop friendly, cheap, serves a cappuccino", 
-                                       place_url='https://www.google.com/maps/place/Caf%C3%A9+Anna+Blume/@52.5371817,13.4207449,17.41z/data=!3m1!5s0x47a84e0108a0f505:0xa0ba322584220387!4m6!3m5!1s0x47a84e01061fde95:0xf6b1fa04e27f04d6!8m2!3d52.5380566!4d13.4195398!16s%2Fg%2F1ts3k78q?entry=ttu&g_ep=EgoyMDI1MDMyNS4xIKXMDSoASAFQAw%3D%3D')
+    info = compare_requirements_with_place_info(requirements="dog-friendly, laptop friendly, cheap, serves a cappuccino", 
+                                       place_url='https://www.google.com/maps/place/Caf%C3%A9+Fleury/@52.5312119,13.3661932,14z/data=!4m10!1m2!2m1!1scafes!3m6!1s0x47a851e49553a285:0xf607e0c1981dac74!8m2!3d52.5312105!4d13.4022441!15sCgVjYWZlc1oHIgVjYWZlc5IBBGNhZmXgAQA!16s%2Fg%2F1tdqskr7?entry=ttu&g_ep=EgoyMDI1MDMyNS4xIKXMDSoASAFQAw%3D%3D')
+    print(parse_response_to_dict(info))
