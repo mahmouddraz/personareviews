@@ -1,0 +1,16 @@
+{
+  "name": "mody",
+  "version": "1.0.0",
+  "description": "1.  conda env create --name gcp-hackathon --file environment.yaml\r 2.  conda activate gcp-hackathon \r 3.  python -m ipykernel install --user --name=gcp-hackathon",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.4.1",
+    "dotenv": "^16.4.7"
+  }
+}

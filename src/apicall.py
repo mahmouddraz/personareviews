@@ -97,15 +97,15 @@ def get_place_id(google_maps_url):
 
 
 def get_places_details(
-    coordinate: tuple= None, link: str = None
+    coordinate: tuple = None,
+    link: str = None,
+    place_type=["restaurant", "cafe"],
+    radius=1000,
 ):
     """Fetches place details either by coordinate (Nearby Search) or from a Google Maps link (Place ID)."""
     API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
 
     gmaps = googlemaps.Client(key=API_KEY)
-
-    radius = 1000  # Search within 1km
-    place_type = "restaurant" 
 
     # Function to flatten nested JSON
     def flatten_dict(d, parent_key="", sep="_"):
@@ -126,12 +126,11 @@ def get_places_details(
     if coordinate:
         # Perform Nearby Search
         places_result = gmaps.places_nearby(
-            location=coordinate, radius=1000, type="restaurant"
+            location=coordinate, radius=radius, type=place_type
         )
 
         for place in places_result.get("results", []):
             place_id = place.get("place_id")
-            print(place_id)
             # Fetch place details
             place_details = gmaps.place(
                 place_id=place_id,
