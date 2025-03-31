@@ -31,3 +31,6 @@ A Streamlit application that lets users record voice reviews for locations and d
    ```
 
 
+## GOOGLE MAPS INFO LINK
+
+https://maps.app.goo.gl/93d6NVxEEj455d3H8?g_st=com.google.maps.preview.copy
