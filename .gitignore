@@ -3,6 +3,6 @@ node_modules
 **.json
 **html
 .env
-env
+env*
 
 __pycache__
